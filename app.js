@@ -4,8 +4,13 @@ const ul = document.getElementById('invitedList');
 
 function createLI(text) {
 	const li = document.createElement('li');
+
+	const span = document.createElement('span');
 	// Displays the value(name) typed in input field into the li.
-	li.textContent = text;
+	span.textContent = text;
+	li.appendChild(span);  
+
+
 	// Create a label to say if confirmed or not..
 	const label = document.createElement('label');
 	label.textContent = 'Confirmed';
@@ -22,7 +27,7 @@ function createLI(text) {
 
 	// Creates a Button to Remove item from the list
 	const removeButton = document.createElement('button');
-	removeButton.textContent = 'remove';
+	removeButton.textContent = 'Remove';
 	li.appendChild(removeButton);
 	// Using the same name for both buttons produces an error. make sure to have differnt names.
 
@@ -56,11 +61,45 @@ ul.addEventListener('change', (e) => {
 
 ul.addEventListener('click', (e) => {
 	if (e.target.tagName === 'BUTTON') {
-		const li = e.target.parentNode;
+		const button = e.target;
+		const li = button.parentNode;
 		const ul = li.parentNode;
-		ul.removeChild(li);
+		if (button.textContent === 'Remove') {
+			ul.removeChild(li);
+			// The next ELSE IF statements edit and save a name on the list.
+		} else if (button.textContent === 'Edit') {
+			const span = li.firstElementChild;
+			const input = document.createElement('input');
+			input.type = 'text';
+			input.value = span.textContent;
+			li.insertBefore(input, span);
+			li.removeChild(span);
+			button.textContent = 'Save';
+		} else if (button.textContent === 'Save') {
+			const input = li.firstElementChild;
+			const span = document.createElement('span');
+			// input.type = 'text';
+			span.textContent = input.value;
+			li.insertBefore(span, input);
+			li.removeChild(input);
+			button.textContent = 'Edit';
+		}
 	}
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
