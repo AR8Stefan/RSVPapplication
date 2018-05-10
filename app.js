@@ -47,12 +47,12 @@ document.addEventListener('DOMContentLoaded', () => { // This line helps code to
       return element;
     }
     
-    const li = document.createElement('li');
+		const li = document.createElement('li');
     appendToLI('span', 'textContent', text);     
     appendToLI('label', 'textContent', 'Confirmed')
       .appendChild(createElement('input', 'type', 'checkbox'));
-    appendToLI('button', 'textContent', 'Edit');
-    appendToLI('button', 'textContent', 'Remove');
+    appendToLI('button', 'textContent', 'edit');
+    appendToLI('button', 'textContent', 'remove');
     // Remember to name buttons same as "else if" statement.
     return li;
   }
@@ -81,15 +81,47 @@ document.addEventListener('DOMContentLoaded', () => { // This line helps code to
 		}
 	});
 
-	ul.addEventListener('click', (e) => {
-		if (e.target.tagName === 'BUTTON') {
-			const button = e.target;
-			const li = button.parentNode;
-			const ul = li.parentNode;
-			if (button.textContent === 'Remove') {
+  ul.addEventListener('click', (e) => {
+    if (e.target.tagName === 'BUTTON') {
+      const button = e.target;
+      const li = button.parentNode;
+      const ul = li.parentNode;
+      const action = button.textContent;
+      const nameActions = {
+        remove: () => {
+          ul.removeChild(li);
+        },
+        edit: () => {
+          const span = li.firstElementChild;
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.value = span.textContent;
+          li.insertBefore(input, span);
+          li.removeChild(span);
+          button.textContent = 'save';  
+        },
+        save: () => {
+          const input = li.firstElementChild;
+          const span = document.createElement('span');
+          span.textContent = input.value;
+          li.insertBefore(span, input);
+          li.removeChild(input);
+          button.textContent = 'edit';        
+        }
+      };
+			
+			// Select and run 'Action' in button's name.
+			nameActions[action](); 
+			// this line replaces the IF statement below.
+		
+		}
+	});
+});
+/*
+		 function removeName() {
 				ul.removeChild(li);
-				// The next ELSE IF statements edit and save a name on the list.
-			} else if (button.textContent === 'Edit') {
+			}
+			function editName() {
 				const span = li.firstElementChild;
 				const input = document.createElement('input');
 				input.type = 'text';
@@ -97,7 +129,8 @@ document.addEventListener('DOMContentLoaded', () => { // This line helps code to
 				li.insertBefore(input, span);
 				li.removeChild(span);
 				button.textContent = 'Save';
-			} else if (button.textContent === 'Save') {
+			}
+			function saveName() {
 				const input = li.firstElementChild;
 				const span = document.createElement('span');
 				span.textContent = input.value;
@@ -105,13 +138,18 @@ document.addEventListener('DOMContentLoaded', () => { // This line helps code to
 				li.removeChild(input);
 				button.textContent = 'Edit';
 			}
-		}
-	});
-});
 
+			const action = button.textContent;
 
-
-
+			if (action === 'Remove') {
+				nameActions.remove();
+				// The next ELSE IF statements edit and save a name on the list.
+			} else if (action === 'Edit') {
+				nameActions.edit();
+			} else if (action === 'Save') {
+				saveName();
+			}
+*/
 
 
 
